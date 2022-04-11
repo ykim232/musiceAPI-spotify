@@ -1,0 +1,102 @@
+/*********************************************************************************
+* WEB422 – Assignment 06
+* I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part of this
+* assignment has been copied manually or electronically from any other source (including web sites) or
+* distributed to other students.
+*
+* Name: Yuli Kim            Student ID: 160437174          Date: Apr 8, 2022
+*
+********************************************************************************/ 
+
+<div class="navbar-container">
+
+  <!-- Top navbar -->
+  <mat-toolbar class="navbar" color="primary">
+
+    <button mat-icon-button (click)="snav.toggle()" *ngIf="token">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <a class="navbar-brand" matTooltip="Home">
+      <h1>
+        Seneca Music
+      </h1>
+    </a>
+
+    <span class="navbar-spacer"></span>
+
+    <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="token">
+      <mat-icon>person</mat-icon>
+      <span fxShow fxHide.xs>
+        {{token.userName}}
+      </span>
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above" [overlapTrigger]="false">
+
+      <a mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Log out</span>
+      </a>
+
+    </mat-menu>
+
+  </mat-toolbar>
+
+  <mat-sidenav-container>
+    <!-- Side nav -->
+    <mat-sidenav #snav [opened]="token && snav.opened" [mode]="'side'" [fixedInViewport]="true" fixedTopGap="56">
+
+      <mat-nav-list>
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Artist</mat-label>
+            <form (ngSubmit)='handleSearch()'><input matInput type="text" name="searchString"
+              [(ngModel)]='searchString'></form>
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+
+        <a mat-list-item routerLink="/newReleases" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            library_music
+          </mat-icon>
+          <p mat-line> New Releases </p>
+        </a>
+
+        <a mat-list-item routerLink="/favourites" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            favourites
+          </mat-icon>
+          <p mat-line> Favourites </p>
+        </a>
+
+        <mat-divider></mat-divider>
+
+        <a id="push-bottom" mat-list-item routerLink="/about" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            info_outline
+          </mat-icon>
+          <p mat-line> About </p>
+        </a>
+      </mat-nav-list>
+
+    </mat-sidenav>
+    
+    <mat-sidenav-content class="sidenav-content">
+      
+      <!-- Main content -->
+      <!-- <app-root></app-root> -->
+      <!-- <app-about></app-about> -->
+      <!-- <app-not-found></app-not-found> -->
+      <!-- <app-new-releases></app-new-releases> -->
+      <!-- <app-album></app-album> -->
+      <!-- <app-favourites></app-favourites> -->
+      <!-- <app-artist-discography></app-artist-discography> -->
+      <router-outlet></router-outlet>
+      <!-- ------------ -->
+      
+      <div class="bottom-spacer"></div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
