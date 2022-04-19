@@ -12,6 +12,7 @@ export class AlbumComponent implements OnInit{
   album : any;
   albumSub: any;
   routeSub: any;
+  addFavSub: any;
   
   constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private mService: MusicDataService) { }
 
@@ -21,17 +22,22 @@ export class AlbumComponent implements OnInit{
     });
   }
 
-  addToFavourites(trackID: string | null): void {
-    if (this.mService.addToFavourites(trackID)) {
-      this.snackBar.open("Adding to Favourites...", "Done", { duration: 1500 });
-    } else {
-      this.snackBar.open("Unable to add song to Favourites", "Error", { duration: 1500 });
-    }
+// Instead of checking the return value of the existing .addToFavourites(id) method from our MusicDataService,
+// subscribe to it in order to see if it was successful.
+  addToFavourites(id): void {
+    this.addFavSub = this.mService.addToFavourites(id).subscribe(
+      success => { 
+        this.snackBar.open("Adding to Favourites...", "Done", { duration: 1500 })
+      }, err => {
+        this.snackBar.open("Unable to add song to Favourites", "Error", { duration: 1500 });
+        console.log(err);
+      }
+    );
   }
 
   ngOnDestroy(): void {
     this.albumSub && this.albumSub.unsubscribe();
     this.routeSub && this.routeSub.unsubscribe();
+    this.addFavSub && this.addFavSub.unsubscribe();
   }
 }
-

@@ -1,11 +1,12 @@
 /*********************************************************************************
-* WEB422 – Assignment 04
+* WEB422 – Assignment 06
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part of this
 * assignment has been copied manually or electronically from any other source (including web sites) or
 * distributed to other students.
 *
-* Name: Yuli Kim            Student ID: 160437174          Date: Mar 09, 2022
+* Name: Yuli Kim            Student ID: 160437174          Date: Apr 09, 2022
 *
+* User API (Heroku) Link: https://apple-surprlse-11792.herokuapp.com/api/user
 ********************************************************************************/
 
 import { Component, OnInit } from '@angular/core';
@@ -20,10 +21,12 @@ import { AuthService } from './auth.service';
 export class AppComponent implements OnInit {
   title = 'web422-a6';
   searchString: string | undefined;
+
   token: any;
 
   constructor(private router: Router, private authService: AuthService){}
 
+  // when component is initialized
   ngOnInit(): void {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) { 

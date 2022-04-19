@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-
+import { NgForm } from '@angular/forms';
+import { RegisterUser } from '../RegisterUser';
 
 @Component({
   selector: 'app-register',
@@ -9,35 +10,29 @@ import { AuthService } from '../auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  registerUser = {
-    userName: "",
-    password: "",
-    password2: ""
-  };
+  registerUser:RegisterUser = new RegisterUser();
   warning: any;
   success = false;
   loading = false;
 
   registerSub: any;
 
-  constructor(private authService: AuthService) { }
+  constructor(private auth: AuthService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
-  }
-
-  onSubmit(): void{
+  onSubmit(f: NgForm): void{
     if(this.registerUser.userName.length > 0 && this.registerUser.password.length > 0 && this.registerUser.password2.length > 0) {
       this.loading = true;
-      this.registerSub =  this.authService.register(this.registerUser).subscribe(
-        next => {
-            this.success = true;
-            this.warning = null;
-            this.loading = false;
-        },
-        err => {
-          this.success = false;
+      this.registerSub =  this.auth.register(this.registerUser).subscribe(
+        success => {
+          this.warning = null;
+          this.success = true;
+          this.auth.setToken(success.token);
+          this.loading = false;
+        }, err => {
           this.warning = err.error.message;
+          this.success = false;
           this.loading = false;
         }
       );

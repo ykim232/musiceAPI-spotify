@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectControlValueAccessor } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
+import { User } from '../User';
 
 @Component({
   selector: 'app-login',
@@ -11,27 +13,24 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  user = {
-    userName:"",
-    password: "",
-    _id: ""
-  }
+  user:User = new User();
   warning: any;
   loading = false;
+  authLogin: any;
 
-  loginSub: any;
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void { }
 
-  onSubmit(): void {
+  onSubmit(f: NgForm): void {
     if(this.user.userName.length > 0 && this.user.password.length > 0) {
       this.loading = true;
-      this.loginSub = this.authService.login(this.user).subscribe(
+
+      this.authLogin = this.auth.login(this.user).subscribe(
         success => {
           this.loading = false;
-          localStorage.setItem("access_token", success.token);
+
+          this.auth.setToken(success.token);
           this.router.navigate(['/newReleases']);
         },
         err => {
@@ -43,6 +42,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.loginSub && this.loginSub.unsubscribe();
+    this.authLogin && this.authLogin.unsubscribe();
   }
 }

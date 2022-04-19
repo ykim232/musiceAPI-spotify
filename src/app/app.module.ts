@@ -65,6 +65,7 @@ import { LoginComponent } from './login/login.component';
     MatSnackBarModule
   ],
   providers: [
+    // registration of my 'Interceptor' by adding the "InterceptTokenService" class
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptTokenService,

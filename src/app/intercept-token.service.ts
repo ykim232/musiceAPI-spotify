@@ -8,19 +8,20 @@ import { Observable } from 'rxjs';
 })
 export class InterceptTokenService implements HttpInterceptor{
 
-  constructor(private authService: AuthService) { }
+  constructor(private auth: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    // Clone the existing request, and add the authorization header if the request.url does not include "spotify.com"
     if (!request.url.includes("spotify.com")) {
+      // clone the request and use the "setHeaders" property to set an "Authorization" header
       request = request.clone({
         setHeaders: {
-          Authorization: `JWT ${this.authService.getToken()}`
+          Authorization: `JWT ${this.auth.getToken()}`
         }
       });
     }
-    // Pass the request on to the next handler
     return next.handle(request);
   }
 }
+
+// Instruction: GO TO app.module.ts > providers array
